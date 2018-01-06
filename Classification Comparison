@@ -5,15 +5,12 @@ import numpy as np
 #Plotting
 from matplotlib import pyplot as plt
 
+#Don't need proprocessing as the built in datasets are already normalised
+
 #Model Selection
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
-
-#Preprocessing
-from sklearn.preprocessing import StandardScaler as scle
-from sklearn.preprocessing import MinMaxScaler as MM
-from sklearn.preprocessing import Normalizer as nrm
 
 #Get confusion matrix and classification report
 from sklearn.metrics import classification_report
@@ -71,7 +68,28 @@ test_size = 0.33
 seed = 2
 X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=validation_size, random_state=seed)
 
+#As well as accuracy we look at recall and f1 score to give a fairer idea of how good the model is
 #Get accuracy, recall, and f1 score
 
 #Classification Comparison
+names = ["Random Forest", "AdaBoost", "Decision Tree", "Nearest Neighbors", "Linear SVM SVC", "LDA"]
+classifiers = [RandomForestClassifier(), AdaBoostClassifier(), DecisionTreeClasifier(), KNeighborsClassifier(), SVC(), LinearDiscriminantAnalysis()]
 
+#Define scoring system
+scoring = 'accuracy'
+
+#Create tuples of each classifier and its name, and iterate through them
+scores = []
+model_names = []
+for name, classifier zip(names, classifiers):
+  kfold = KFold(n_splits=10,random_state=seed)
+  cross_val_results = cross_val_score(classifier,X_train,Y_train,cv=kfold,scoring=scoring)
+  scores.append(cross_val_results)
+  model_names.append(names)
+  print("The %s model had a mean accuracy of %f and a standard deviation of (%f)" % (round(cross_val_results.mean(),cross_val_results.std())
+ 
+
+  
+  
+  
+  
