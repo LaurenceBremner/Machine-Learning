@@ -18,6 +18,8 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 
+# Add sklearn.ensemble.GradientBoostingClassifier
+
 #Classifiers
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import AdaBoostClassifier
