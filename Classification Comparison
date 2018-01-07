@@ -70,24 +70,25 @@ classifiers = [RandomForestClassifier(), AdaBoostClassifier(), DecisionTreeClass
 #Define scoring system
 scoring = 'accuracy'
 
-#Create array of scores
+#Create array of cross validation results
 scores = []
 #Create array of the classifier names
 model_names = []
 
-#Use zip to iterate through each (classifier, name) tuple
+averages = []
 
-for name, classifier in list(zip(names, classifiers)):
+for name,classifier in list(zip(names,classifiers)):
   kfold = KFold(n_splits=10,random_state=seed)
-  cross_val_results = cross_val_score(classifier,X_train,Y_train,cv=kfold,scoring=scoring)  
-  scores.append(cross_val_results)
+  cross_val_results=cross_val_score(classifier,X_train,Y_train,cv=kfold,scoring=scoring)
   model_names.append(name)
-  print("The %s model had a mean accuracy of %f and a standard deviation of (%f)" % (name, round(cross_val_results.mean(),2),round(cross_val_results.std(),2)
-  
-#Use indices of scores of the top models to get the model names. We will use this later to test the top 2 classifiers against each other
-index = np.argsort(-np.array(scores))[:1]
+  scores.append(cross_val_results)
+  print("The %s model had a mean accuracy of %f, and a standard deviation of %f" % (name, cross_val_results.mean(), cross_val_results.std()))
+  averages.append(cross_val_results.mean())
+ 
+#Get index of top performing model. We will use this later to test the top 2 classifiers against each other
+index = np.argsort(-np.array(averages))[:2]
 
-best_algo = model_names[index]
+best_model = model_names[int(index)]
 mean_score = scores[index].mean()
 standard_deviation = scores[index].std()
 
