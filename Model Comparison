@@ -82,13 +82,13 @@ for name,classifier in list(zip(names,classifiers)):
 #Plot the models using box and whiskers, and select the best one automatically
 
 #Get index of top performing model. We will use this later to test the top 2 classifiers against each other
-index = np.argsort(-np.array(averages))[:1]
+index = int(np.argsort(-np.array(averages))[:1])
 
-best_model = classifiers[int(index)]
-best_model_name = model_names[int(index)]
+best_model = classifiers[index]
+best_model_name = model_names[index]
 
-mean_score = scoring_results[int(index)].mean()
-standard_deviation = scoring_results[int(index)].std()
+mean_score = scoring_results[index].mean()
+standard_deviation = scoring_results[index].std()
 
 print("The best model was %s, with a mean accuracy of %f, and a standard deviation of (%f)" % (best_model_name, mean_score, standard_deviation))
 
