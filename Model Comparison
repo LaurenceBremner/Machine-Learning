@@ -15,18 +15,17 @@ from sklearn.model_selection import train_test_split
 
 #Get confusion matrix and classification report
 from sklearn.metrics import classification_report
-from sklearn.metrics import confusion matrix
+from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
-from sklearn.metrics import scatter_matrix
 
 #Classifiers
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import AdaBoostClassifier
-from sklearn.tree import DecisionTreeClasifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import ElasticNet
 from sklearn.svm import SVC
-from sklearn.disciminant_analysis import LinearDiscriminantAnalysis
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
 #Load Dataset and create DataFrame
 feature_names = ['sepal_length','sepal_width','petal_length','petal_width','flower_type']
@@ -57,8 +56,8 @@ seed = 2
 X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=test_size, random_state=seed)
 
 #Classification Comparison
-names = ["Random Forest ", "AdaBoost ", "Decision Tree", "Nearest Neighbors", "Linear SVM SVC", "LDA", "Elastic Net"]
-classifiers = [RandomForestClassifier(), AdaBoostClassifier(), DecisionTreeClassifier(), KNeighborsClassifier(), SVC(), LinearDiscriminantAnalysis(), ElasticNet()]
+names = ["Random Forest ", "AdaBoost ", "Decision Tree", "Nearest Neighbors", "Linear SVM SVC", "LDA"]
+classifiers = [RandomForestClassifier(), AdaBoostClassifier(), DecisionTreeClassifier(), KNeighborsClassifier(), SVC(), LinearDiscriminantAnalysis()]
 
 #Define scoring system
 scoring = 'accuracy'
@@ -106,5 +105,3 @@ print(accuracy_score(Y_test, output))
 print(confusion_matrix(Y_test, output))
 
 #This model achieves 100% precision, recall, and f1-score
-
-
