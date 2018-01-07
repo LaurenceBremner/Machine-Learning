@@ -1,9 +1,10 @@
 #Load Libaries and datasets
 import pandas as pd
 import numpy as np
+from pandas.plotting import scatter_matrix
 
 #Plotting
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 
 #Don't need proprocessing as the built in datasets are already normalised
 
@@ -15,7 +16,8 @@ from sklearn.model_selection import train_test_split
 #Get confusion matrix and classification report
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion matrix
-# from sklearn.metrics import scoring
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import scatter_matrix
 
 #Classifiers
 from sklearn.ensemble import RandomForestClassifier
@@ -30,9 +32,6 @@ from sklearn.disciminant_analysis import LinearDiscriminantAnalysis
 
 #Load Data
 #iris = load_iris()
-
-#Create DataFrame
-#df = pd.DataFrame(iris.data,columns=iris.feature_names)
 
 #Load DataSet
 feature_names = ['sepal_length','sepal_width','petal_length','petal_width','flower_type']
@@ -60,36 +59,49 @@ scatter_matrix(df)
 X = df.values[:,0:4]
 Y = df.values[:,4]
 
-#Random Seed to ensure cross validation is completed on same fold for each model in the case of using KFold 
-#(models are tested fairly against one another)
-#seed = np.random.seed(0)
-
 test_size = 0.33
 seed = 2
-X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=validation_size, random_state=seed)
-
-#As well as accuracy we look at recall and f1 score to give a fairer idea of how good the model is
-#Get accuracy, recall, and f1 score
+X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=test_size, random_state=seed)
 
 #Classification Comparison
-names = ["Random Forest", "AdaBoost", "Decision Tree", "Nearest Neighbors", "Linear SVM SVC", "LDA"]
-classifiers = [RandomForestClassifier(), AdaBoostClassifier(), DecisionTreeClasifier(), KNeighborsClassifier(), SVC(), LinearDiscriminantAnalysis()]
+names = ["Random Forest ", "AdaBoost ", "Decision Tree", "Nearest Neighbors", "Linear SVM SVC", "LDA"]
+classifiers = [RandomForestClassifier(), AdaBoostClassifier(), DecisionTreeClassifier(), KNeighborsClassifier(), SVC(), LinearDiscriminantAnalysis()]
 
 #Define scoring system
 scoring = 'accuracy'
 
-#Create tuples of each classifier and its name, and iterate through them
+#Create array of scores
 scores = []
+#Create array of the classifier names
 model_names = []
-for name, classifier zip(names, classifiers):
-  kfold = KFold(n_splits=10,random_state=seed)
-  cross_val_results = cross_val_score(classifier,X_train,Y_train,cv=kfold,scoring=scoring)
-  scores.append(cross_val_results)
-  model_names.append(names)
-  print("The %s model had a mean accuracy of %f and a standard deviation of (%f)" % (round(cross_val_results.mean(),cross_val_results.std())
- 
 
+#Use zip to iterate through each (classifier, name) tuple
+
+for name, classifier in list(zip(names, classifiers)):
+  kfold = KFold(n_splits=10,random_state=seed)
+  cross_val_results = cross_val_score(classifier,X_train,Y_train,cv=kfold,scoring=scoring)  
+  scores.append(cross_val_results)
+  model_names.append(name)
+  print("The %s model had a mean accuracy of %f and a standard deviation of (%f)" % (name, round(cross_val_results.mean(),2),round(cross_val_results.std(),2)
   
-  
-  
-  
+#Use indices of scores of the top models to get the model names. We will use this later to test the top 2 classifiers against each other
+index = np.argsort(-np.array(scores))[:1]
+
+best_algo = model_names[index]
+mean_score = scores[index].mean()
+standard_deviation = scores[index].std()
+
+print("The best model was %s, with a mean accuracy of %f, and a standard deviation of (%f)" % (best_algo, mean_score, standard_deviation))
+
+#Create a plot of the algorithms
+
+#As well as accuracy we look at recall and f1 score to give a fairer idea of how good the model is
+#Get accuracy, recall, and f1 score
+
+#Test model on validation dataset
+best.fit(X_train,Y_train)
+output = best.predict(X_test)
+print(classification_report(Y_test, output))
+print(accuracy_score(Y_test, output))
+print(confusion_matrix(Y_test, output))
+
